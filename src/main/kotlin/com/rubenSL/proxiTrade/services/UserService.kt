@@ -14,27 +14,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class UserService : UserDetailsService {
+class UserService  {
     @Autowired
     private lateinit var userRepository: UserRepository
 
     @Autowired
     private lateinit var userMapper: UserMapper
 
-    @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository.findByName(username)
-            ?: throw UsernameNotFoundException("User not found with username: $username")
 
-        return org.springframework.security.core.userdetails.User
-            .withUsername(username)
-            .password(user.password)
-            .authorities(emptyList())
-            .accountExpired(false)
-            .accountLocked(false)
-            .credentialsExpired(false)
-            .disabled(false)
-            .build()
+
+    fun loadUserByUsername(username: String): UserDetails {
+        val user = userRepository.findByEmail(username) ?: throw UsernameNotFoundException("User with email $username not found")
+        return org.springframework.security.core.userdetails.User(user.email, user.password, emptyList())
+    }
+
+    fun getUserByEmail(email: String): UserDTO {
+        val user = userRepository.findByEmail(email) ?: throw EntityNotFoundException("User with email $email not found")
+        return userMapper.toUserDTO(user)
     }
 
     fun getUserById(id: String): UserDTO {

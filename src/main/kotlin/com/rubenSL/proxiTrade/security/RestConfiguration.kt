@@ -14,7 +14,7 @@ class RestConfiguration {
     fun corsConfigurer(): WebMvcConfigurer {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:8100","http://192.168.1.145:8100", "http://192.168.1.41:8100")
+                registry.addMapping("/**").allowedOrigins("*")
             }
         }
     }

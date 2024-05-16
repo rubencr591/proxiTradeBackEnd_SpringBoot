@@ -1,6 +1,6 @@
 package com.rubenSL.proxiTrade.model.dtos
 
 data class LoginDTO(
-    val username: String,
+    val email: String,
     val password: String
 )

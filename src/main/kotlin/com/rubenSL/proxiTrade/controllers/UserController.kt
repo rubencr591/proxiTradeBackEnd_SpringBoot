@@ -38,12 +38,12 @@ class UserController(private val userService: UserService) {
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginDTO: LoginDTO): ResponseEntity<UserDetails> {
-        val userDetails = userService.loadUserByUsername(loginDTO.username)
-        if (userDetails.password != loginDTO.password) {
+    fun login(@RequestBody loginDTO: LoginDTO): ResponseEntity<UserDTO> {
+        val userLogged = userService.getUserByEmail(loginDTO.email)
+        if (userLogged.password != loginDTO.password) {
             throw IllegalArgumentException("Invalid password")
         }
-        return ResponseEntity.ok(userDetails)
+        return ResponseEntity.ok(userLogged)
     }
 
     @PutMapping("/{id}")
