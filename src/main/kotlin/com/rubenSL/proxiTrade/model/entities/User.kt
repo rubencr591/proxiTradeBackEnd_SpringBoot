@@ -28,5 +28,9 @@ data class User(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "location")
-    var location: Location? = null
+    var location: Location? = null,
+
+    @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL]) //LAZY para que no se cargue la imagen al cargar el usuario
+    var profilePicture: ProfilePicture? = null
+
 )

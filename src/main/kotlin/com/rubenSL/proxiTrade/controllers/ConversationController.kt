@@ -1,5 +1,6 @@
 package com.rubenSL.proxiTrade.controllers
 
+import com.rubenSL.proxiTrade.model.dtos.ConversationDTO
 import com.rubenSL.proxiTrade.model.entities.Conversation
 import com.rubenSL.proxiTrade.services.ConversationService
 import org.springframework.web.bind.annotation.*
@@ -25,7 +26,7 @@ class ConversationController(private val conversationService: ConversationServic
     }
 
     @GetMapping("/user/{uid}")
-    fun getAllConversationsById(@PathVariable uid: String): List<Conversation> {
+    fun getAllConversationsById(@PathVariable uid: String): List<ConversationDTO> {
         return conversationService.getAllConversationsById(uid)
     }
 

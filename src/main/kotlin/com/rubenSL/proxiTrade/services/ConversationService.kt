@@ -1,6 +1,8 @@
 package com.rubenSL.proxiTrade.services
 
+import com.rubenSL.proxiTrade.model.dtos.ConversationDTO
 import com.rubenSL.proxiTrade.model.entities.Conversation
+import com.rubenSL.proxiTrade.model.mappers.ConversationMapper
 import com.rubenSL.proxiTrade.repositories.ConversationRepository
 import com.rubenSL.proxiTrade.repositories.UserRepository
 import org.springframework.stereotype.Service
@@ -36,7 +38,8 @@ class ConversationService (private val conversationRepository: ConversationRepos
         conversationRepository.deleteById(id)
     }
 
-    fun getAllConversationsById(uid: String): List<Conversation> {
-        return conversationRepository.findByUser1UidOrUser2Uid(uid, uid)
+    fun getAllConversationsById(uid: String): List<ConversationDTO> {
+        val conversations = conversationRepository.findByUser1UidOrUser2Uid(uid, uid)
+        return conversations.map { ConversationMapper.toConversationDTO(it) }
     }
 }

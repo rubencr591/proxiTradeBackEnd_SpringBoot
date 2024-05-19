@@ -29,5 +29,8 @@ data class Product(
 
     @ManyToOne
     @JoinColumn(name = "productOwner")
-    var productOwner: User? = null
+    var productOwner: User? = null,
+
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var images: List<Image> = mutableListOf()
 )

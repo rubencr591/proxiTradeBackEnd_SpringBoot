@@ -7,5 +7,6 @@ data class UserDTO(
     var password: String?,
     var address: String? = null,
     var phone: Int? = 0,
-    var location: LocationDTO? = null
+    var location: LocationDTO? = null,
+    var profilePicture : String? = null
 )

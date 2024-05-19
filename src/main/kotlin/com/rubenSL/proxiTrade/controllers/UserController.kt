@@ -3,10 +3,10 @@ import com.rubenSL.proxiTrade.exceptions.UserAlreadyExistsException
 import com.rubenSL.proxiTrade.model.dtos.LoginDTO
 import com.rubenSL.proxiTrade.model.dtos.UserDTO
 import com.rubenSL.proxiTrade.model.dtos.UserResponseDTO
+import com.rubenSL.proxiTrade.model.entities.ProfilePicture
 import com.rubenSL.proxiTrade.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -50,6 +50,20 @@ class UserController(private val userService: UserService) {
     fun updateUser(@PathVariable id: String, @RequestBody userDTO: UserDTO): ResponseEntity<UserDTO> {
         val updatedUser = userService.updateUser(id, userDTO)
         return ResponseEntity.ok(updatedUser)
+    }
+
+    @PutMapping("/{uid}/profilePicture")
+    fun updateProfilePicture(@PathVariable uid: String, @RequestBody base64:String): ResponseEntity<String> {
+        return try {
+
+            val profilePicture = ProfilePicture()
+
+            userService.updateProfilePicture(uid, profilePicture, base64)
+
+            ResponseEntity.ok("Profile picture updated successfully")
+        } catch (e: Exception) {
+            ResponseEntity.status(500).body("Error updating profile picture: ${e.message}")
+        }
     }
 
     @DeleteMapping("/{id}")
