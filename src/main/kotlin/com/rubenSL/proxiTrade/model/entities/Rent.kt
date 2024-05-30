@@ -7,18 +7,22 @@ import java.time.LocalDateTime
 @Data
 @Entity
 @Table(name = "rents")
-class Rent {
+data class Rent(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long? = null
+    var id: Long = 0,
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private val user: User? = null
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    var user: User,
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private val product: Product? = null
-    private val startDate: LocalDateTime? = null
-    private val endDate: LocalDateTime? = null
-}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    var product: Product,
+
+    @Column(name = "start_date", nullable = false)
+    var startDate: LocalDateTime,
+
+    @Column(name = "end_date", nullable = false)
+    var endDate: LocalDateTime
+)

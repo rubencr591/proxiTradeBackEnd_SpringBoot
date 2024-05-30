@@ -1,4 +1,5 @@
 package com.rubenSL.proxiTrade.model.entities
+
 import java.time.LocalDateTime
 import jakarta.persistence.*
 import lombok.Data
@@ -11,19 +12,18 @@ data class Transaction(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
-    @ManyToOne
-    @JoinColumn(name = "userSeller")
-    var userSeller: User? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seller", nullable = false)
+    var userSeller: User,
 
-    @ManyToOne
-    @JoinColumn(name = "userBuyer")
-    var userBuyer: User? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_buyer", nullable = false)
+    var userBuyer: User,
 
-    @ManyToOne
-    @JoinColumn(name = "product")
-    var product: Product? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product", nullable = false)
+    var product: Product,
 
-    var date: LocalDateTime? = null,
-
-    var type: String? = null
+    @Column(nullable = false)
+    var date: LocalDateTime = LocalDateTime.now()
 )

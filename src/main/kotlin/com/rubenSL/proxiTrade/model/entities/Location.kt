@@ -13,7 +13,14 @@ data class Location(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = 0,
     var latitude: Float = 0f,
-    var longitude: Float = 0f
+    var longitude: Float = 0f,
+    var street: String = "",
+    var postalCode: String = "",
+    var numberLetter: String = "",
+    var country: String = "",
+    var city: String = "",
+    var province: String = ""
+
 ) {
     fun calculateDistance(location: Location): Float {
         val lat1 = this.latitude

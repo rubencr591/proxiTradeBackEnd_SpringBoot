@@ -8,12 +8,12 @@ import com.rubenSL.proxiTrade.model.entities.ProfilePicture
 import com.rubenSL.proxiTrade.model.entities.User
 import com.rubenSL.proxiTrade.model.mappers.LocationMapper
 import com.rubenSL.proxiTrade.model.mappers.UserMapper
+import com.rubenSL.proxiTrade.repositories.ProfilePictureRepository
 import com.rubenSL.proxiTrade.repositories.UserRepository
 import jakarta.persistence.EntityNotFoundException
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import java.sql.Blob
@@ -21,31 +21,35 @@ import java.util.*
 import javax.sql.rowset.serial.SerialBlob
 
 @Service
-class UserService  {
+class UserService(@Autowired private val userRepository: UserRepository, @Autowired private val userMapper: UserMapper)  {
+
+
     @Autowired
-    private lateinit var userRepository: UserRepository
+    private lateinit var profilePictureRepository: ProfilePictureRepository
 
     //Transactional es una anotación que se utiliza para indicar que un método debe ser ejecutado dentro de una transacción.
     @Transactional
-    fun updateProfilePicture(userId: String, profilePicture: ProfilePicture, imageBase64: String?): User {
+    fun updateProfilePicture(userId: String, imageBase64: String?): User {
         val user = userRepository.findById(userId).orElseThrow { Exception("User not found") }
 
-        if(imageBase64 != null){
-            // Convertir la cadena base64 a Blob
+        val profilePicture = profilePictureRepository.findByUserUid(userId).orElse(ProfilePicture())
+
+        if (imageBase64 != null) {
             val imageBytes = Base64.getDecoder().decode(imageBase64)
             val imageBlob: Blob = SerialBlob(imageBytes)
-            // Asignar el Blob a profilePicture
             profilePicture.base64 = imageBlob
-            profilePicture.user = user
-            user.profilePicture = profilePicture
-        }else{
+        } else {
             profilePicture.base64 = null
-            profilePicture.user = user
-            user.profilePicture = profilePicture
         }
 
-        return userRepository.save(user) //Update user with new profile picture
+        profilePicture.user = user
+
+        user.profilePicture = profilePicture
+        profilePictureRepository.save(profilePicture) // Save the profile picture separately if needed
+
+        return userRepository.save(user)
     }
+
 
     fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByEmail(username) ?: throw UsernameNotFoundException("User with email $username not found")
@@ -54,17 +58,21 @@ class UserService  {
 
     fun getUserByEmail(email: String): UserDTO {
         val user = userRepository.findByEmail(email) ?: throw EntityNotFoundException("User with email $email not found")
-        return UserMapper.toUserDTO(user)
+        return userMapper.toUserDTO(user)
     }
 
     fun getUserById(id: String): UserDTO {
         val user = userRepository.findById(id).orElseThrow { EntityNotFoundException("User with id $id not found") }
-        return UserMapper.toUserDTO(user)
+        return userMapper.toUserDTO(user)
+    }
+
+    fun getUserByUid(uid: String): User {
+        return userRepository.findByUid(uid) ?: throw EntityNotFoundException("User with uid $uid not found")
     }
 
     fun getAllUsers(): List<UserResponseDTO> {
         val users = userRepository.findAll()
-        return users.map { UserMapper.toUserResponseDTO(it) }
+        return users.map { userMapper.toUserResponseDTO(it) }
     }
 
     fun getAllUsersByName(name: String): List<UserResponseDTO> {
@@ -73,7 +81,7 @@ class UserService  {
         val userDTOs = mutableListOf<UserResponseDTO>()
 
         for (user in users) {
-            userDTOs.add(UserMapper.toUserResponseDTO(user))
+            userDTOs.add(userMapper.toUserResponseDTO(user))
         }
 
         return userDTOs
@@ -91,9 +99,9 @@ class UserService  {
             throw UserAlreadyExistsException("User with phone ${userDTO.phone} already exists")
         }
 
-        val user = UserMapper.toUser(userDTO)
+        val user = userMapper.toUser(userDTO)
         val savedUser = userRepository.save(user)
-        val userResponse = UserMapper.toUserDTO(savedUser)
+        val userResponse = userMapper.toUserDTO(savedUser)
         userResponse.uid = savedUser.uid
         return userResponse
     }
@@ -102,10 +110,10 @@ class UserService  {
         if (!userRepository.existsById(id)) {
             throw EntityNotFoundException("User with id $id not found")
         }
-        val user = UserMapper.toUser(userDTO)
+        val user = userMapper.toUser(userDTO)
         user.uid = id
         val updatedUser = userRepository.save(user)
-        return UserMapper.toUserDTO(updatedUser)
+        return userMapper.toUserDTO(updatedUser)
     }
 
     fun deleteUser(id: String) {
@@ -119,7 +127,7 @@ class UserService  {
         val user = userRepository.findById(id).orElseThrow { EntityNotFoundException("User with id $id not found") }
         user.location = LocationMapper.toLocation(locationDTO)
         val updatedUser = userRepository.save(user)
-        return UserMapper.toUserDTO(updatedUser)
+        return userMapper.toUserDTO(updatedUser)
     }
 }
 

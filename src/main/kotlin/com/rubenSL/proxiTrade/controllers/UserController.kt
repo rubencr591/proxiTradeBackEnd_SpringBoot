@@ -53,17 +53,11 @@ class UserController(private val userService: UserService) {
     }
 
     @PutMapping("/{uid}/profilePicture")
-    fun updateProfilePicture(@PathVariable uid: String, @RequestBody base64:String): ResponseEntity<String> {
-        return try {
+    fun updateProfilePicture(@PathVariable uid: String, @RequestBody base64:String?): ResponseEntity<Boolean> {
+            userService.updateProfilePicture(uid,base64)
 
-            val profilePicture = ProfilePicture()
+           return ResponseEntity.ok(true)
 
-            userService.updateProfilePicture(uid, profilePicture, base64)
-
-            ResponseEntity.ok("Profile picture updated successfully")
-        } catch (e: Exception) {
-            ResponseEntity.status(500).body("Error updating profile picture: ${e.message}")
-        }
     }
 
     @DeleteMapping("/{id}")

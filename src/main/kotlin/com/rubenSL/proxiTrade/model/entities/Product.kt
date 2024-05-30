@@ -15,7 +15,9 @@ data class Product(
 
     var description: String = "",
 
-    var category: String = "",
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    var category: Category? = null,
 
     @Column(name = "sale_price")
     var salePrice: Double = 0.0,
@@ -31,6 +33,6 @@ data class Product(
     @JoinColumn(name = "productOwner")
     var productOwner: User? = null,
 
-    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL])
     var images: List<Image> = mutableListOf()
 )

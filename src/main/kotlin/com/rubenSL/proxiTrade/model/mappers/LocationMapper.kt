@@ -12,7 +12,13 @@ class LocationMapper {
             return Location(
                 id = locationDTO.id,
                 latitude = locationDTO.latitude,
-                longitude = locationDTO.longitude
+                longitude = locationDTO.longitude,
+                street = locationDTO.street,
+                postalCode = locationDTO.postalCode,
+                numberLetter = locationDTO.numberLetter,
+                country = locationDTO.country,
+                city = locationDTO.city,
+                province = locationDTO.province
             )
         }
 
@@ -21,7 +27,13 @@ class LocationMapper {
                 LocationDTO(
                     id = location.id,
                     latitude = location.latitude,
-                    longitude = location.longitude
+                    longitude = location.longitude,
+                    street = location.street,
+                    postalCode = location.postalCode,
+                    numberLetter = location.numberLetter,
+                    country = location.country,
+                    city = location.city,
+                    province = location.province
                 )
             } else {
                 null

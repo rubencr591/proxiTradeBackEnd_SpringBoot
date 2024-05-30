@@ -12,7 +12,8 @@ data class Image(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0,
 
-    @Column(name = "base64", columnDefinition = "BLOB")
+    @Lob
+    @Column(name = "base64", columnDefinition = "LONGBLOB")
     var base64: Blob? = null,
 
     @ManyToOne

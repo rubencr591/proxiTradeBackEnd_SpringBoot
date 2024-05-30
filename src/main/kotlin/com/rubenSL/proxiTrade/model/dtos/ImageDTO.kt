@@ -4,5 +4,5 @@ import java.sql.Blob
 
 data class ImageDTO (
     var id: Long?,
-    var base64: Blob?,
+    var base64: String?,
     var productId: Long?)

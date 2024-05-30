@@ -1,20 +1,37 @@
 package com.rubenSL.proxiTrade.controllers
 
 import com.rubenSL.proxiTrade.model.dtos.ProductDTO
+import com.rubenSL.proxiTrade.model.entities.Category
 import com.rubenSL.proxiTrade.model.entities.Product
+import com.rubenSL.proxiTrade.services.CategoryService
 import com.rubenSL.proxiTrade.services.ProductService
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/products")
-class ProductController(private val productService: ProductService) {
+class ProductController(private val productService: ProductService, private val categoryService: CategoryService) {
 
     @GetMapping("/{id}")
-    fun getProductById(@PathVariable id: Long): Product {
-        return productService.getProductById(id)
+    fun getProductById(@PathVariable id: Long): ProductDTO {
+        return productService.getProductDTOById(id)
     }
 
-    @PostMapping("/post")
+    @GetMapping("/myProducts/{uid}")
+    fun getProductsByUser(@PathVariable uid: String): List<ProductDTO> {
+        return productService.getProductByUser(uid)
+    }
+
+    @GetMapping("/someProducts/{uid}")
+    fun getProductsNotFromUser(@PathVariable uid: String): List<ProductDTO>? {
+        return productService.getProductNotFromUser(uid)
+    }
+
+    @GetMapping("/categories")
+    fun getCategories(): List<Category> {
+        return categoryService.getAllCategories()
+    }
+
+    @PostMapping("/create")
     fun createProduct(@RequestBody productDTO: ProductDTO): ProductDTO {
         return productService.createProduct(productDTO)
     }
