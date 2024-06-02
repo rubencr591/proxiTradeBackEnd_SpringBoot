@@ -10,6 +10,6 @@ data class ProductDTO(
     var rentedPrice: Double?,
     var address: String?,
     var availability: Boolean?,
-    var productOwner: UserResponseDTO?,
+    var productOwner: String?,
     var images: List<ImageDTO>?
 )

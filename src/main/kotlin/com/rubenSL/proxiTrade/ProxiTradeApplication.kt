@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin
 
 
 
-@SpringBootApplication(exclude = [SecurityAutoConfiguration::class, ManagementWebSecurityAutoConfiguration::class])
+@SpringBootApplication
 class ProxiTradeApplication : SpringBootServletInitializer(){
 	override fun configure(application: SpringApplicationBuilder): SpringApplicationBuilder {
 		return application.sources(ProxiTradeApplication::class.java)

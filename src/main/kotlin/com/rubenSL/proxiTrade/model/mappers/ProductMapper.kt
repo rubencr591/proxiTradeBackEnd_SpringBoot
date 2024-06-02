@@ -29,14 +29,15 @@ class ProductMapper @Autowired constructor(
             rentedPrice = product.rentedPrice,
             address = product.address,
             availability = product.availability,
-            productOwner = product.productOwner?.let { userMapper.toUserResponseDTO(it) },
+            productOwner = product.productOwner?.uid,
             images = product.images.map { imageMapper.toImageDTO(it) }
         )
     }
 
     fun toProduct(productDTO: ProductDTO): Product {
         val category = productDTO.category?.let { categoryService.getCategoryById(it) }
-        val user =  userService.getUserByUid(productDTO.productOwner?.uid!!)
+
+        val user = productDTO.productOwner?.let { userService.getUserByUid(it) }
         return Product(
             name = productDTO.name!!,
             description = productDTO.description!!,

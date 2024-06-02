@@ -4,11 +4,13 @@ import com.rubenSL.proxiTrade.model.dtos.UserDTO
 import com.rubenSL.proxiTrade.model.dtos.UserResponseDTO
 import com.rubenSL.proxiTrade.model.entities.Location
 import com.rubenSL.proxiTrade.model.entities.User
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class UserMapper {
+class UserMapper @Autowired constructor(private val locationMapper: LocationMapper) {
+
 
 
         fun toUserDTO(user: User): UserDTO {
@@ -24,7 +26,7 @@ class UserMapper {
                 password = user.password,
                 address = user.address,
                 phone = user.phone,
-                location = LocationMapper.toLocationDTO(user.location),
+                location = locationMapper.toLocationDTO(user.location),
                 profilePicture = profilePictureBase64
             )
         }
@@ -40,7 +42,7 @@ class UserMapper {
                 uid = user.uid,
                 name = user.name,
                 email = user.email,
-                location = LocationMapper.toLocationDTO(user.location),
+                location = locationMapper.toLocationDTO(user.location),
                 profilePicture = profilePictureBase64
             )
         }
@@ -50,20 +52,7 @@ class UserMapper {
                 uid = userResponseDTO.uid!!,
                 name = userResponseDTO.name!!,
                 email = userResponseDTO.email!!,
-
-                location = if (userResponseDTO.location != null) {
-                    userResponseDTO.location?.latitude?.let {
-                        userResponseDTO.location?.longitude?.let { it1 ->
-                            Location(
-                                id = userResponseDTO.location?.id,
-                                latitude = it,
-                                longitude = it1
-                            )
-                        }
-                    }
-                } else {
-                    null
-                },
+                location = userResponseDTO.location?.let { locationMapper.toLocation(it) },
 
             )
         }
@@ -76,19 +65,7 @@ class UserMapper {
                 password = userDTO.password!!,
                 address = userDTO.address ?: "",
                 phone = userDTO.phone ?: 0,
-                location = if (userDTO.location != null) {
-                    userDTO.location?.latitude?.let {
-                        userDTO.location?.longitude?.let { it1 ->
-                            Location(
-                                id = userDTO.location?.id,
-                                latitude = it,
-                                longitude = it1
-                            )
-                        }
-                    }
-                } else {
-                    null
-                }
+                location = userDTO.location?.let { locationMapper.toLocation(it) },
             )
         }
 

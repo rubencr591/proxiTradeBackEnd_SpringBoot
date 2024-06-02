@@ -4,6 +4,7 @@ import com.rubenSL.proxiTrade.model.dtos.LoginDTO
 import com.rubenSL.proxiTrade.model.dtos.UserDTO
 import com.rubenSL.proxiTrade.model.dtos.UserResponseDTO
 import com.rubenSL.proxiTrade.model.entities.ProfilePicture
+import com.rubenSL.proxiTrade.security.FirebaseService
 import com.rubenSL.proxiTrade.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(private val userService: UserService) {
+class UserController(private val userService: UserService, private val firebaseService: FirebaseService) {
 
-    @GetMapping("/{id}")
-    fun getUserById(@PathVariable id: String): ResponseEntity<UserDTO> {
-        val user = userService.getUserById(id)
+    @GetMapping
+    fun getUserById(@RequestHeader("Authorization") idToken:String): ResponseEntity<UserDTO> {
+        val uid = firebaseService.getUidFromToken(idToken.substring(7))
+        val user = userService.getUserById(uid)
+
         return ResponseEntity.ok(user)
     }
 
@@ -46,22 +49,25 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok(userLogged)
     }
 
-    @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: String, @RequestBody userDTO: UserDTO): ResponseEntity<UserDTO> {
+    @PutMapping
+    fun updateUser(@RequestHeader("Authorization") idToken: String, @RequestBody userDTO: UserDTO): ResponseEntity<UserDTO> {
+        val id = firebaseService.getUidFromToken(idToken.substring(7))
         val updatedUser = userService.updateUser(id, userDTO)
         return ResponseEntity.ok(updatedUser)
     }
 
-    @PutMapping("/{uid}/profilePicture")
-    fun updateProfilePicture(@PathVariable uid: String, @RequestBody base64:String?): ResponseEntity<Boolean> {
+    @PutMapping("/profilePicture")
+    fun updateProfilePicture(@RequestHeader("Authorization") idToken: String, @RequestBody base64:String?): ResponseEntity<Boolean>{
+        val uid = firebaseService.getUidFromToken(idToken.substring(7))
             userService.updateProfilePicture(uid,base64)
 
            return ResponseEntity.ok(true)
 
     }
 
-    @DeleteMapping("/{id}")
-    fun deleteUser(@PathVariable id: String): ResponseEntity<Unit> {
+    @DeleteMapping
+    fun deleteUser(@RequestHeader("Authorization") idToken: String): ResponseEntity<Unit> {
+        val id = firebaseService.getUidFromToken(idToken.substring(7))
         userService.deleteUser(id)
         return ResponseEntity.noContent().build()
     }

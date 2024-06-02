@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component
 @Component
 class LocationMapper {
 
-    companion object {
         fun toLocation(locationDTO: LocationDTO): Location {
             return Location(
                 id = locationDTO.id,
@@ -39,5 +38,4 @@ class LocationMapper {
                 null
             }
         }
-    }
 }

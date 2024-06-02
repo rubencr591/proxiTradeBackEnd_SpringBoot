@@ -21,7 +21,7 @@ import java.util.*
 import javax.sql.rowset.serial.SerialBlob
 
 @Service
-class UserService(@Autowired private val userRepository: UserRepository, @Autowired private val userMapper: UserMapper)  {
+class UserService @Autowired constructor( private val userRepository: UserRepository,  private val userMapper: UserMapper, private val locationMapper: LocationMapper)  {
 
 
     @Autowired
@@ -125,7 +125,7 @@ class UserService(@Autowired private val userRepository: UserRepository, @Autowi
 
     fun updateUserLocation(id: String, locationDTO: LocationDTO): UserDTO {
         val user = userRepository.findById(id).orElseThrow { EntityNotFoundException("User with id $id not found") }
-        user.location = LocationMapper.toLocation(locationDTO)
+        user.location = locationMapper.toLocation(locationDTO)
         val updatedUser = userRepository.save(user)
         return userMapper.toUserDTO(updatedUser)
     }
