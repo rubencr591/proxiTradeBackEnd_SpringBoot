@@ -19,14 +19,15 @@ data class Location(
     var numberLetter: String = "",
     var country: String = "",
     var city: String = "",
+    var community: String = "",
     var province: String = ""
 
 ) {
-    fun calculateDistance(location: Location): Float {
+    fun calculateDistance(latitude: Float, longitude: Float): Float {
         val lat1 = this.latitude
         val lon1 = this.longitude
-        val lat2 = location.latitude
-        val lon2 = location.longitude
+        val lat2 = latitude
+        val lon2 = longitude
 
         val theta = lon1 - lon2
         var dist = (sin(Math.toRadians(lat1.toDouble())) * sin(Math.toRadians(lat2.toDouble())) +

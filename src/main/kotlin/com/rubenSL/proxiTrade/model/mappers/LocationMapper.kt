@@ -17,6 +17,7 @@ class LocationMapper {
                 numberLetter = locationDTO.numberLetter,
                 country = locationDTO.country,
                 city = locationDTO.city,
+                community = locationDTO.community,
                 province = locationDTO.province
             )
         }
@@ -32,6 +33,7 @@ class LocationMapper {
                     numberLetter = location.numberLetter,
                     country = location.country,
                     city = location.city,
+                    community = location.community,
                     province = location.province
                 )
             } else {

@@ -16,5 +16,5 @@ interface UserRepository : JpaRepository<User, String> {
     @Query("SELECT u FROM User u WHERE LOWER(u.name) LIKE LOWER(CONCAT(:name, '%'))")
     fun findAllByName(name: String): List<User>
 
-    fun findByPhone(phone: Int): User?
+    fun findByPhone(phone: Long): User?
 }

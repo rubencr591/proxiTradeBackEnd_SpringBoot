@@ -6,4 +6,5 @@ data class UserResponseDTO(
     var email: String? = null,
     var location: LocationDTO? = null,
     var profilePicture: String? = null,
+    var kmRatio: Double? = null,
 )

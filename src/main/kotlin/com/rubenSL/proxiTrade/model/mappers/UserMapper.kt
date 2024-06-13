@@ -24,10 +24,10 @@ class UserMapper @Autowired constructor(private val locationMapper: LocationMapp
                 name = user.name,
                 email = user.email,
                 password = user.password,
-                address = user.address,
                 phone = user.phone,
                 location = locationMapper.toLocationDTO(user.location),
-                profilePicture = profilePictureBase64
+                profilePicture = profilePictureBase64,
+                kmRatio = user.kmRatio
             )
         }
 
@@ -43,7 +43,8 @@ class UserMapper @Autowired constructor(private val locationMapper: LocationMapp
                 name = user.name,
                 email = user.email,
                 location = locationMapper.toLocationDTO(user.location),
-                profilePicture = profilePictureBase64
+                profilePicture = profilePictureBase64,
+                kmRatio = user.kmRatio
             )
         }
 
@@ -53,7 +54,6 @@ class UserMapper @Autowired constructor(private val locationMapper: LocationMapp
                 name = userResponseDTO.name!!,
                 email = userResponseDTO.email!!,
                 location = userResponseDTO.location?.let { locationMapper.toLocation(it) },
-
             )
         }
 
@@ -63,9 +63,9 @@ class UserMapper @Autowired constructor(private val locationMapper: LocationMapp
                 name = userDTO.name!!,
                 email = userDTO.email!!,
                 password = userDTO.password!!,
-                address = userDTO.address ?: "",
                 phone = userDTO.phone ?: 0,
                 location = userDTO.location?.let { locationMapper.toLocation(it) },
+                kmRatio = userDTO.kmRatio ?: 0.0
             )
         }
 

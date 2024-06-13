@@ -6,6 +6,7 @@ import com.rubenSL.proxiTrade.model.entities.Product
 import com.rubenSL.proxiTrade.security.FirebaseService
 import com.rubenSL.proxiTrade.services.CategoryService
 import com.rubenSL.proxiTrade.services.ProductService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,7 +21,7 @@ class ProductController(private val productService: ProductService,
     }
 
     @GetMapping("/myProducts")
-    fun getProductsByUser(@RequestHeader("Authorization") idToken: String): List<ProductDTO> {
+    fun getProductsByUser(@RequestHeader("Authorization") idToken: String): List<ProductDTO>? {
         val uid = firebaseService.getUidFromToken(idToken.substring(7))
         return productService.getProductByUser(uid)
     }
@@ -31,6 +32,13 @@ class ProductController(private val productService: ProductService,
         return productService.getProductNotFromUser(uid)
     }
 
+    @GetMapping("/nearby")
+    fun getNearbyProducts(@RequestHeader("Authorization") idToken: String): List<ProductDTO>? {
+        val uid = firebaseService.getUidFromToken(idToken.substring(7))
+        return productService.getNearbyProducts(uid)
+    }
+
+
     @GetMapping("/categories")
     fun getCategories(): List<Category> {
         return categoryService.getAllCategories()
@@ -39,17 +47,33 @@ class ProductController(private val productService: ProductService,
     @PostMapping("/create")
     fun createProduct(@RequestHeader("Authorization") idToken: String,@RequestBody productDTO: ProductDTO): ProductDTO {
         val uid = firebaseService.getUidFromToken(idToken.substring(7))
-        productDTO.productOwner = uid
-        return productService.createProduct(productDTO)
+        return productService.createProduct(productDTO, uid)
     }
 
-    @PutMapping("/{id}")
-    fun updateProduct(@PathVariable id: Long, @RequestBody product: Product): Product {
-        return productService.updateProduct(id, product)
+    @PutMapping("/update")
+    fun updateProduct(@RequestHeader("Authorization")idToken: String, @RequestBody product: ProductDTO): ProductDTO {
+        val token = idToken.substring(7)
+        val uid = firebaseService.getUidFromToken(token)
+        firebaseService.verifyToken(token)
+
+        return productService.updateProduct(uid,product)
+    }
+
+
+    @PutMapping("/available/{id}")
+    fun updateProductAvailability(@RequestHeader("Authorization") idToken: String, @PathVariable id: Long): ResponseEntity<ProductDTO> {
+        val token = idToken.substring(7)
+        val uid = firebaseService.getUidFromToken(token)
+        firebaseService.verifyToken(token)
+
+        return ResponseEntity.ok(productService.updateProductAvailability(id))
     }
 
     @DeleteMapping("/{id}")
-    fun deleteProduct(@PathVariable id: Long) {
-        productService.deleteProduct(id)
+    fun deleteProduct(@RequestHeader("Authorization") idToken: String ,@PathVariable id: Long) {
+        val token = idToken.substring(7)
+        val uid = firebaseService.getUidFromToken(token)
+        firebaseService.verifyToken(token)
+        productService.deleteProduct(uid,id)
     }
 }

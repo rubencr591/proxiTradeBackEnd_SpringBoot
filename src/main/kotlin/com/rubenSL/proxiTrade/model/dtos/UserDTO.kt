@@ -5,8 +5,8 @@ data class UserDTO(
     var name: String?,
     var email: String?,
     var password: String?,
-    var address: String? = null,
-    var phone: Int? = 0,
+    var phone: Long? = 0,
     var location: LocationDTO? = null,
-    var profilePicture : String? = null
+    var profilePicture : String? = null,
+    var kmRatio: Double? = 50.0,
 )

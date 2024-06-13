@@ -20,17 +20,18 @@ data class User(
     @Column(name ="password")
     var password: String = "",
 
-    @Column(name ="address")
-    var address: String = "",
 
     @Column(name ="phone", unique = true)
-    var phone: Int = 0,
+    var phone: Long = 0,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "location")
     var location: Location? = null,
 
     @OneToOne(mappedBy = "user", cascade = [CascadeType.ALL]) //LAZY para que no se cargue la imagen al cargar el usuario
-    var profilePicture: ProfilePicture? = null
+    var profilePicture: ProfilePicture? = null,
+
+    @Column(name ="kmRatio")
+    var kmRatio: Double? = null,
 
 )

@@ -27,9 +27,10 @@ class ProductMapper @Autowired constructor(
             categoryName = product.category?.name,
             salePrice = product.salePrice,
             rentedPrice = product.rentedPrice,
-            address = product.address,
+            latitude = product.latitude,
+            longitude = product.longitude,
             availability = product.availability,
-            productOwner = product.productOwner?.uid,
+            productOwnerId = product.productOwner?.uid,
             images = product.images.map { imageMapper.toImageDTO(it) }
         )
     }
@@ -37,14 +38,13 @@ class ProductMapper @Autowired constructor(
     fun toProduct(productDTO: ProductDTO): Product {
         val category = productDTO.category?.let { categoryService.getCategoryById(it) }
 
-        val user = productDTO.productOwner?.let { userService.getUserByUid(it) }
+        val user = productDTO.productOwnerId?.let { userService.getUserByUid(it) }
         return Product(
             name = productDTO.name!!,
             description = productDTO.description!!,
             category = category,
             salePrice = productDTO.salePrice!!,
             rentedPrice = productDTO.rentedPrice!!,
-            address = productDTO.address!!,
             availability = productDTO.availability!!,
             productOwner = user,
             images = productDTO.images?.map { imageMapper.toImage(it) }?.toMutableList() ?: mutableListOf()

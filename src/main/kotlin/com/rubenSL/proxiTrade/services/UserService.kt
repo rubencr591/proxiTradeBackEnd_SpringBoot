@@ -8,6 +8,7 @@ import com.rubenSL.proxiTrade.model.entities.ProfilePicture
 import com.rubenSL.proxiTrade.model.entities.User
 import com.rubenSL.proxiTrade.model.mappers.LocationMapper
 import com.rubenSL.proxiTrade.model.mappers.UserMapper
+import com.rubenSL.proxiTrade.repositories.LocationRepository
 import com.rubenSL.proxiTrade.repositories.ProfilePictureRepository
 import com.rubenSL.proxiTrade.repositories.UserRepository
 import jakarta.persistence.EntityNotFoundException
@@ -21,7 +22,10 @@ import java.util.*
 import javax.sql.rowset.serial.SerialBlob
 
 @Service
-class UserService @Autowired constructor( private val userRepository: UserRepository,  private val userMapper: UserMapper, private val locationMapper: LocationMapper)  {
+class UserService @Autowired constructor( private val userRepository: UserRepository,
+                                          private val userMapper: UserMapper,
+                                          private val locationMapper: LocationMapper,
+                                            private val locationRepository: LocationRepository) {
 
 
     @Autowired
@@ -45,7 +49,7 @@ class UserService @Autowired constructor( private val userRepository: UserReposi
         profilePicture.user = user
 
         user.profilePicture = profilePicture
-        profilePictureRepository.save(profilePicture) // Save the profile picture separately if needed
+        profilePictureRepository.save(profilePicture)
 
         return userRepository.save(user)
     }
@@ -63,6 +67,7 @@ class UserService @Autowired constructor( private val userRepository: UserReposi
 
     fun getUserById(id: String): UserDTO {
         val user = userRepository.findById(id).orElseThrow { EntityNotFoundException("User with id $id not found") }
+        val location = user.location
         return userMapper.toUserDTO(user)
     }
 
@@ -123,11 +128,39 @@ class UserService @Autowired constructor( private val userRepository: UserReposi
         userRepository.deleteById(id)
     }
 
-    fun updateUserLocation(id: String, locationDTO: LocationDTO): UserDTO {
+    fun updateUserLocation(id: String, locationDTO: LocationDTO) {
         val user = userRepository.findById(id).orElseThrow { EntityNotFoundException("User with id $id not found") }
-        user.location = locationMapper.toLocation(locationDTO)
-        val updatedUser = userRepository.save(user)
-        return userMapper.toUserDTO(updatedUser)
+
+        val currentLocation = user.location
+
+
+        if (currentLocation != null) {
+            currentLocation.city = locationDTO.city
+            currentLocation.community = locationDTO.community
+            currentLocation.country = locationDTO.country
+            currentLocation.latitude = locationDTO.latitude
+            currentLocation.longitude = locationDTO.longitude
+            currentLocation.numberLetter = locationDTO.numberLetter
+            currentLocation.postalCode = locationDTO.postalCode
+            currentLocation.province = locationDTO.province
+            currentLocation.street = locationDTO.street
+
+            locationRepository.save(currentLocation)
+
+
+        }else{
+            val location = locationMapper.toLocation(locationDTO)
+            locationRepository.save(location)
+        }
+
+
+
+    }
+
+    fun updateKmRatio(uid: String, kmRatio: Double) {
+        val user = userRepository.findByUid(uid) ?: throw EntityNotFoundException("User with uid $uid not found")
+        user.kmRatio = kmRatio
+        userRepository.save(user)
     }
 }
 

@@ -7,6 +7,7 @@ data class LocationDTO(
     var numberLetter: String,
     var country: String,
     var city: String,
+    var community: String,
     var province: String,
     var latitude: Float,
     var longitude: Float

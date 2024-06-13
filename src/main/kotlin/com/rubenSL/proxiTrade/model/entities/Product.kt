@@ -25,7 +25,9 @@ data class Product(
     @Column(name = "rented_price")
     var rentedPrice: Double = 0.0,
 
-    var address: String = "",
+    var latitude: Float = 0.0f,
+
+    var longitude: Float = 0.0f,
 
     var availability: Boolean = false,
 
@@ -34,5 +36,5 @@ data class Product(
     var productOwner: User? = null,
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL])
-    var images: List<Image> = mutableListOf()
+    var images: MutableList<Image> = mutableListOf()
 )

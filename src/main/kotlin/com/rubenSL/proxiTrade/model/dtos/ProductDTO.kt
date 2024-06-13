@@ -8,8 +8,9 @@ data class ProductDTO(
     val categoryName: String?,
     var salePrice: Double?,
     var rentedPrice: Double?,
-    var address: String?,
+    var latitude: Float?,
+    var longitude: Float?,
     var availability: Boolean?,
-    var productOwner: String?,
+    var productOwnerId: String?,
     var images: List<ImageDTO>?
 )
