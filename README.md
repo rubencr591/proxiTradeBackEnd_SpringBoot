@@ -1,3 +1,4 @@
+# Backend en Springboot para Página Web de Venta de Artículos  
 Este repositorio contiene el backend desarrollado en **Spring Boot(Kotlin)** ccomo parte de mi Trabajo de Fin de Grado (TFG). La aplicación es una plataforma de compraventa de artículos entre usuarios, diseñada con una arquitectura basada en microservicios y el modelo vista-controlador (MVC).
 
 ## Funcionalidades principales  
