@@ -2,9 +2,9 @@ package com.rubenSL.proxiTrade.model.dtos
 
 data class TransactionDTO(
     var id: Long?,
-    var userSellerId: Long?,
-    var userBuyerId: Long?,
+    var userSellerUid: String?,
+    var userBuyerUid: String? = null,
     var productId: Long?,
-    var date: String?,
+    var amount:Double?,
     var type: String?
 )

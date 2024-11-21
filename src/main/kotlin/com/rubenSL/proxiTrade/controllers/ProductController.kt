@@ -2,7 +2,6 @@ package com.rubenSL.proxiTrade.controllers
 
 import com.rubenSL.proxiTrade.model.dtos.ProductDTO
 import com.rubenSL.proxiTrade.model.entities.Category
-import com.rubenSL.proxiTrade.model.entities.Product
 import com.rubenSL.proxiTrade.security.FirebaseService
 import com.rubenSL.proxiTrade.services.CategoryService
 import com.rubenSL.proxiTrade.services.ProductService
@@ -63,7 +62,7 @@ class ProductController(private val productService: ProductService,
     @PutMapping("/available/{id}")
     fun updateProductAvailability(@RequestHeader("Authorization") idToken: String, @PathVariable id: Long): ResponseEntity<ProductDTO> {
         val token = idToken.substring(7)
-        val uid = firebaseService.getUidFromToken(token)
+        firebaseService.getUidFromToken(token)
         firebaseService.verifyToken(token)
 
         return ResponseEntity.ok(productService.updateProductAvailability(id))

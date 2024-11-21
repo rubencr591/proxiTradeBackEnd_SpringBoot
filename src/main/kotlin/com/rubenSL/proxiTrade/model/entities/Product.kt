@@ -22,8 +22,6 @@ data class Product(
     @Column(name = "sale_price")
     var salePrice: Double = 0.0,
 
-    @Column(name = "rented_price")
-    var rentedPrice: Double = 0.0,
 
     var latitude: Float = 0.0f,
 

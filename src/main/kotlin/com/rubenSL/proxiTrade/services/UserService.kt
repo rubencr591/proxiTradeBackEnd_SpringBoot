@@ -67,7 +67,7 @@ class UserService @Autowired constructor( private val userRepository: UserReposi
 
     fun getUserById(id: String): UserDTO {
         val user = userRepository.findById(id).orElseThrow { EntityNotFoundException("User with id $id not found") }
-        val location = user.location
+        user.location
         return userMapper.toUserDTO(user)
     }
 

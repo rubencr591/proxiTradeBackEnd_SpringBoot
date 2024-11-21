@@ -2,7 +2,6 @@ package com.rubenSL.proxiTrade.controllers
 
 import com.rubenSL.proxiTrade.exceptions.ResourceNotFoundException
 import com.rubenSL.proxiTrade.exceptions.BadRequestException
-import com.rubenSL.proxiTrade.model.dtos.ConversationDTO
 import com.rubenSL.proxiTrade.model.dtos.FormattedConversationDTO
 import com.rubenSL.proxiTrade.model.entities.Conversation
 import com.rubenSL.proxiTrade.security.FirebaseService

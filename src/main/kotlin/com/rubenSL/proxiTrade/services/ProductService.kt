@@ -112,7 +112,7 @@ class ProductService {
     fun createProduct(productDTO: ProductDTO, uid:String): ProductDTO {
         productDTO.productOwnerId = uid
 
-        val currentUser = userService.getUserById(uid)
+        userService.getUserById(uid)
 
         // Separar la cadena "data/jpge, BASE64" en cada ImageDTO
         productDTO.images?.forEach { imageDTO ->
@@ -145,7 +145,6 @@ class ProductService {
 
             productToUpdate.name = productDTO.name ?: productToUpdate.name
             productToUpdate.description = productDTO.description ?: productToUpdate.description
-            productToUpdate.rentedPrice = productDTO.rentedPrice ?: productToUpdate.rentedPrice
             productToUpdate.salePrice = productDTO.salePrice ?: productToUpdate.salePrice
             productToUpdate.category = productDTO.category?.let { categoryService.getCategoryById(it) }
             productToUpdate.availability = productDTO.availability ?: productToUpdate.availability

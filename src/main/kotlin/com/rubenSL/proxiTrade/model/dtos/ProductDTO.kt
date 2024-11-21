@@ -7,7 +7,6 @@ data class ProductDTO(
     var category: Long?,
     val categoryName: String?,
     var salePrice: Double?,
-    var rentedPrice: Double?,
     var latitude: Float?,
     var longitude: Float?,
     var availability: Boolean?,

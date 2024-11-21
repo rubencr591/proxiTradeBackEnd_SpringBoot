@@ -25,5 +25,11 @@ data class Transaction(
     var product: Product,
 
     @Column(nullable = false)
-    var date: LocalDateTime = LocalDateTime.now()
+    var date: LocalDateTime = LocalDateTime.now(),
+
+    @Column(nullable = false)
+    var amount:Double,
+
+    @Column(nullable = false)
+    var type: String
 )

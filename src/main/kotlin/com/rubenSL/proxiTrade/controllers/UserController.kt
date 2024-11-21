@@ -4,7 +4,6 @@ import com.rubenSL.proxiTrade.model.dtos.LocationDTO
 import com.rubenSL.proxiTrade.model.dtos.LoginDTO
 import com.rubenSL.proxiTrade.model.dtos.UserDTO
 import com.rubenSL.proxiTrade.model.dtos.UserResponseDTO
-import com.rubenSL.proxiTrade.model.entities.ProfilePicture
 import com.rubenSL.proxiTrade.security.FirebaseService
 import com.rubenSL.proxiTrade.services.UserService
 import org.springframework.http.HttpStatus
@@ -30,7 +29,7 @@ class UserController(private val userService: UserService, private val firebaseS
     @GetMapping("/{id}")
     fun getUserById(@RequestHeader("Authorization") idToken:String, @PathVariable id:String): ResponseEntity<UserDTO> {
         val token = idToken.substring(7)
-        val uid = firebaseService.getUidFromToken(token)
+        firebaseService.getUidFromToken(token)
         firebaseService.verifyToken(token)
         val user = userService.getUserById(id)
 
@@ -98,7 +97,7 @@ class UserController(private val userService: UserService, private val firebaseS
     }
 
     @DeleteMapping
-    fun deleteUser(@RequestHeader("Authorization") idToken: String): ResponseEntity<Unit> {
+    fun deleteUser(@RequestHeader("Authorization") idToken: String): ResponseEntity<Any> {
         val id = firebaseService.getUidFromToken(idToken.substring(7))
         userService.deleteUser(id)
         return ResponseEntity.noContent().build()

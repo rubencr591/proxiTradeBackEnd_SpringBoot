@@ -14,8 +14,8 @@ class RestConfiguration {
     fun corsConfigurer(): WebMvcConfigurer {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**")
-                    .allowedOrigins("*")
+                registry.addMapping("/**") // Permitir todos los endpoints
+                    .allowedOrigins("http://localhost:8100")
                     .allowedMethods("*")
             }
         }

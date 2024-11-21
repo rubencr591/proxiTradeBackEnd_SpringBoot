@@ -26,7 +26,6 @@ class ProductMapper @Autowired constructor(
             category = product.category?.id,
             categoryName = product.category?.name,
             salePrice = product.salePrice,
-            rentedPrice = product.rentedPrice,
             latitude = product.latitude,
             longitude = product.longitude,
             availability = product.availability,
@@ -44,7 +43,6 @@ class ProductMapper @Autowired constructor(
             description = productDTO.description!!,
             category = category,
             salePrice = productDTO.salePrice!!,
-            rentedPrice = productDTO.rentedPrice!!,
             availability = productDTO.availability!!,
             productOwner = user,
             images = productDTO.images?.map { imageMapper.toImage(it) }?.toMutableList() ?: mutableListOf()
