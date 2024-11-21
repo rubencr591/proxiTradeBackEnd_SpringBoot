@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+src/main/resources/proxitrade-9b26e-firebase-adminsdk-750ob-f6159d495f.json
