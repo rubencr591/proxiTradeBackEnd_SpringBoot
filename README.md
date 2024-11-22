@@ -20,4 +20,4 @@ Este repositorio contiene el backend desarrollado en **Spring Boot(Kotlin)** cco
 - **JUnit y Kotlin Test**: Frameworks de prueba para realizar pruebas unitarias y de integración en el proyecto.
 - **Spring Boot DevTools**: Herramientas de desarrollo para mejorar la experiencia en la creación, prueba y depuración de la aplicación.
 - **Maven**: Herramienta de automatización de construcción y gestión de dependencias.
-- **FrontEnd**: Angular+Ionic (TypeScript) https://github.com/rubencr591/proxiTradeBackEnd_Springboot
+- **FrontEnd**: Angular+Ionic (TypeScript) https://github.com/rubencr591/proxiTradeFrontEnd_Angular
